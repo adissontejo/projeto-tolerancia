@@ -1,0 +1,85 @@
+services:
+  airlineshub:
+    build:
+      context: ./airlineshub
+      dockerfile: Dockerfile
+    container_name: airlineshub
+    environment:
+      FLIGHT_CATALOG: '[{"id":1,"origin":"NAT","destination":"GRU"},{"id":2,"origin":"GRU","destination":"JPA"}]'
+      SEAT_CATALOG: '[{"flightId":1,"seats":100},{"flightId":2,"seats":80}]'
+    networks:
+      - internal-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  exchange:
+    build:
+      context: ./exchange
+      dockerfile: Dockerfile
+    container_name: exchange
+    environment:
+      INITIAL_EXCHANGE_RATE: "5.00"
+    networks:
+      - internal-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  fidelity:
+    build:
+      context: ./fidelity
+      dockerfile: Dockerfile
+    container_name: fidelity
+    networks:
+      - internal-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  imdtravel:
+    build:
+      context: ./imdtravel
+      dockerfile: Dockerfile
+    container_name: imdtravel
+    ports:
+      - "8080:8080"
+    environment:
+      AIRLINESHUB_URL: http://airlineshub:8080
+      EXCHANGE_URL: http://exchange:8080
+      FIDELITY_URL: http://fidelity:8080
+      SALES_DATA_DIR: /app/data/sales
+    volumes:
+      - imdtravel-sales:/app/data/sales
+    networks:
+      - internal-network
+    depends_on:
+      airlineshub:
+        condition: service_healthy
+      exchange:
+        condition: service_healthy
+      fidelity:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+networks:
+  internal-network:
+    driver: bridge
+
+volumes:
+  imdtravel-sales:
+    name: imdtravel-sales
