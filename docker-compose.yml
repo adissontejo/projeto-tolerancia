@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile
     container_name: exchange
     environment:
-      INITIAL_EXCHANGE_RATE: "5.00"
+      INITIAL_EXCHANGE_RATE: "5.50"
     networks:
       - internal-network
     healthcheck:
