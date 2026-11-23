@@ -1,0 +1,7 @@
+HTTP/1.1 201 
+X-Correlation-Id: evidencia-1
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Mon, 23 Nov 2026 15:41:44 GMT
+
+{"transactionId":"d94468c2-8a10-4c35-b31e-baafe808ced1","flight":"IMD200","day":"2026-12-03","user":"evidencia","valueUSD":420.50,"valueBRL":2308.02,"rate":5.488752888448351,"rateAsOf":"2026-11-23T15:41:37.729937597Z","bonus":420}
