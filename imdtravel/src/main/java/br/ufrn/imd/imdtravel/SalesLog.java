@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class SalesLog {
 
-    public record Sale(String correlationId, String transactionId, Integer flight, String day, String user, BigDecimal valueUSD, BigDecimal valueBRL, String ts) {}
+    public record Sale(String correlationId, String transactionId, String flight, String day, String user, BigDecimal valueUSD, BigDecimal valueBRL, String ts) {}
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final Path dir;

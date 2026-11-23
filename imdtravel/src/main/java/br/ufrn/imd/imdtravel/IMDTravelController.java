@@ -25,11 +25,11 @@ import java.util.Map;
 @RestController
 public class IMDTravelController {
 
-    public record BuyTicketRequest(Integer flight, String day, String user) {}
-    public record BuyTicketResponse(String transactionId, Integer flight, String day, String user, BigDecimal valueUSD, BigDecimal valueBRL, BigDecimal rate, String rateAsOf, long bonus) {}
-    private record FlightResponse(Integer flight, String day, BigDecimal priceUSD, int seatsAvailable) {}
+    public record BuyTicketRequest(String flight, String day, String user) {}
+    public record BuyTicketResponse(String transactionId, String flight, String day, String user, BigDecimal valueUSD, BigDecimal valueBRL, BigDecimal rate, String rateAsOf, long bonus) {}
+    private record FlightResponse(String flight, String day, BigDecimal priceUSD, int seatsAvailable) {}
     private record ConvertResponse(BigDecimal rate, String asOf) {}
-    private record SellRequest(Integer flight, String day) {}
+    private record SellRequest(String flight, String day) {}
     private record SellResponse(String transactionId, int seatsRemaining) {}
     private record BonusRequest(String user, long bonus) {}
 

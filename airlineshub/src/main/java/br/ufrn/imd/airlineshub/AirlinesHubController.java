@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @RestController
 public class AirlinesHubController {
 
-    public record SellRequest(Integer flight, String day) {}
+    public record SellRequest(String flight, String day) {}
     public record SellResponse(String transactionId, int seatsRemaining) {}
 
     private final Instant startedAt = Instant.now();
@@ -52,7 +52,7 @@ public class AirlinesHubController {
     }
 
     @GetMapping("/flight")
-    public ResponseEntity<?> getFlight(@RequestParam int flight, @RequestParam String day) {
+    public ResponseEntity<?> getFlight(@RequestParam String flight, @RequestParam String day) {
         LocalDate parsedDay;
 
         try {
