@@ -99,5 +99,5 @@ public class FidelityController {
 
     private record UserPoints(long totalPoints, List<BonusEntry> entries) {}
 
-    private record BonusEntry(long bonus, String correlationId) {}
+    private record BonusEntry(long bonus, String cid) {}
 }

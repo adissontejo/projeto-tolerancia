@@ -5,14 +5,11 @@ services:
       dockerfile: Dockerfile
     container_name: airlineshub
     environment:
-      FLIGHT_CATALOG: |
-        [
-          {"id": 1, "origin": "NAT", "destination": "GRU", "priceUSD": 250.00},
-          {"id": 2, "origin": "GRU", "destination": "JPA", "priceUSD": 239.90},
-          {"id": 3, "origin": "JPA", "destination": "NAT", "priceUSD": 149.90}
-        ]
+      CATALOG_FLIGHTS: "IMD100,IMD200,IMD300"
+      CATALOG_BASE_PRICES: "350.50,420.50,510.50"
+      CATALOG_START_DATE: "2026-12-01"
       CATALOG_DAYS: "7"
-      SEATS_PER_FLIGHT_DAY: "20"
+      CATALOG_SEATS: "20"
       TZ: "America/Fortaleza"
     networks:
       - internal-network

@@ -3,9 +3,6 @@ package br.ufrn.imd.airlineshub;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.math.BigDecimal; // geralmente usado para dinheiro, pois evita problemas de precisão com ponto flutuante
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,10 +17,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class Catalog {
 
-    public record Flight(Integer id, String origin, String destination, BigDecimal priceUSD) {}
-    public record FlightDay(Integer flightId, LocalDate day) {}
+    public record Flight(String id, BigDecimal priceUSD) {}
+    public record FlightDay(String flightId, LocalDate day) {}
 
-    public record FlightAvailability(Integer flight, LocalDate day, BigDecimal priceUSD, int seatsAvailable) {}
+    public record FlightAvailability(String flight, LocalDate day, BigDecimal priceUSD, int seatsAvailable) {}
 
     public enum SaleStatus { SOLD, SOLD_OUT, NOT_FOUND }
     public record SaleResult(SaleStatus status, String transactionId, int seatsRemaining) {}
@@ -36,12 +33,14 @@ public class Catalog {
     private final Map<FlightDay, AtomicInteger> seats;
 
     public Catalog(
-        @Value("${FLIGHT_CATALOG}") String flightCatalog,
+        @Value("${CATALOG_FLIGHTS}") String catalogFlights,
+        @Value("${CATALOG_BASE_PRICES}") String catalogBasePrices,
+        @Value("${CATALOG_START_DATE}") String catalogStartDate,
         @Value("${CATALOG_DAYS}") int catalogDays,
-        @Value("${SEATS_PER_FLIGHT_DAY}") int seatsPerFlightDay
-    ) throws Exception {
-        this.flights = parseFlights(flightCatalog);
-        this.days = buildDays(catalogDays);
+        @Value("${CATALOG_SEATS}") int seatsPerFlightDay
+    ) {
+        this.flights = parseFlights(catalogFlights, catalogBasePrices);
+        this.days = buildDays(LocalDate.parse(catalogStartDate), catalogDays);
         this.seats = buildSeats(this.flights, this.days, seatsPerFlightDay);
 
         Map<String, Object> catalogInfo = new LinkedHashMap<>();
@@ -53,17 +52,23 @@ public class Catalog {
         JsonLogger.log(null, "catalogo.carregado", 0, catalogInfo);
     }
 
-    private List<Flight> parseFlights(String json) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(json, new TypeReference<List<Flight>>() {});
+    private List<Flight> parseFlights(String ids, String prices) {
+        String[] flightIds = ids.split(",");
+        String[] basePrices = prices.split(",");
+        List<Flight> result = new ArrayList<>();
+
+        for (int i = 0; i < flightIds.length; i++) {
+            result.add(new Flight(flightIds[i].trim(), new BigDecimal(basePrices[i].trim())));
+        }
+
+        return result;
     }
 
-    private List<LocalDate> buildDays(int count) {
-        LocalDate today = LocalDate.now();
+    private List<LocalDate> buildDays(LocalDate startDate, int count) {
         List<LocalDate> result = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
-            result.add(today.plusDays(i));
+            result.add(startDate.plusDays(i));
         }
 
         return result;
@@ -81,7 +86,7 @@ public class Catalog {
         return result;
     }
 
-    public Optional<FlightAvailability> findFlight(int flightId, LocalDate day) {
+    public Optional<FlightAvailability> findFlight(String flightId, LocalDate day) {
         AtomicInteger available = seats.get(new FlightDay(flightId, day));
 
         if (available == null) {
@@ -96,7 +101,7 @@ public class Catalog {
         return Optional.of(new FlightAvailability(flightId, day, flight.priceUSD(), available.get()));
     }
 
-    public SaleResult sell(int flightId, LocalDate day) {
+    public SaleResult sell(String flightId, LocalDate day) {
         AtomicInteger available = seats.get(new FlightDay(flightId, day));
 
         if (available == null) {

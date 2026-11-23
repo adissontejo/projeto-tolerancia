@@ -1,0 +1,10 @@
+{"ts":"2026-11-23T15:41:44.036542998Z","svc":"fidelity","cid":"evidencia-1","event":"requisicao.recebida","ms":0,"path":"/bonus"}
+{"ts":"2026-11-23T15:41:44.037496261Z","svc":"fidelity","cid":"evidencia-1","event":"resposta.enviada","ms":0,"path":"/bonus","status":200}
+{"ts":"2026-11-23T15:41:43.271905296Z","svc":"imdtravel","cid":"evidencia-1","event":"requisicao.recebida","ms":0,"method":"POST","path":"/buyTicket"}
+{"ts":"2026-11-23T15:41:44.043035303Z","svc":"imdtravel","cid":"evidencia-1","event":"venda.registrada","ms":768,"transactionId":"d94468c2-8a10-4c35-b31e-baafe808ced1","flight":"IMD200","day":"2026-12-03","user":"evidencia","valueBRL":2308.02}
+{"ts":"2026-11-23T15:41:44.045137218Z","svc":"imdtravel","cid":"evidencia-1","event":"resposta.enviada","ms":773,"method":"POST","path":"/buyTicket","status":201}
+{"ts":"2026-11-23T15:41:43.278770541Z","svc":"airlineshub","cid":"evidencia-1","event":"requisicao.recebida","ms":0,"method":"GET","path":"/flight","query":"flight=IMD200&day=2026-12-03"}
+{"ts":"2026-11-23T15:41:43.281074959Z","svc":"airlineshub","cid":"evidencia-1","event":"resposta.enviada","ms":2,"method":"GET","path":"/flight","query":"flight=IMD200&day=2026-12-03","status":200}
+{"ts":"2026-11-23T15:41:43.292945306Z","svc":"airlineshub","cid":"evidencia-1","event":"requisicao.recebida","ms":0,"method":"POST","path":"/sell"}
+{"ts":"2026-11-23T15:41:44.021442089Z","svc":"airlineshub","cid":"evidencia-1","event":"venda.processada","ms":726,"flight":"IMD200","day":"2026-12-03","delayMs":726,"result":"SOLD","transactionId":"d94468c2-8a10-4c35-b31e-baafe808ced1","seatsRemaining":19}
+{"ts":"2026-11-23T15:41:44.023573659Z","svc":"airlineshub","cid":"evidencia-1","event":"resposta.enviada","ms":730,"method":"POST","path":"/sell","status":201}
