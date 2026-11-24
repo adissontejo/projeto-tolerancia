@@ -1,4 +1,4 @@
-﻿
+
 == 1. GET /health nos quatro serviços
   ok imdtravel: status ok e uptimeS numérico
   ok airlineshub: status ok e uptimeS numérico
@@ -6,7 +6,7 @@
   ok fidelity: status ok e uptimeS numérico
 
 == 2. Uma compra bem-sucedida
-  par: IMD100 2026-12-01   usuário: r1795448096-ana   cid: r1795448096-cid-1
+  par: IMD100 2026-12-01   usuário: r1795479606-ana   cid: r1795479606-cid-1
   ok status 201
   ok resposta tem os 9 campos, nenhum nulo
   ok flight, day e user ecoam o pedido
@@ -54,7 +54,7 @@
   ok quem recebeu 409 não ganhou bônus
 
 == 7. Fidelity parado: falha depois do passo irreversível
-  a compra levou 72s para responder
+  a compra levou 134s para responder
   ok a compra devolveu 500
   ok o assento foi consumido mesmo assim
   ok nenhuma linha nova em GET /sales

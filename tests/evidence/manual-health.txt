@@ -1,4 +1,4 @@
-imdtravel: {"status":"ok","uptimeS":269,"salesWritable":true}
-airlineshub: {"status":"ok","uptimeS":273,"flights":3,"days":7,"pairs":21,"expectedPairs":21,"negativePairs":0,"seatsAvailable":397}
-exchange: {"status":"ok","uptimeS":274}
-fidelity: {"status":"ok","uptimeS":274}
+imdtravel: {"status":"ok","uptimeS":2820,"salesWritable":true}
+airlineshub: {"status":"ok","uptimeS":2827,"flights":3,"days":7,"pairs":21,"expectedPairs":21,"negativePairs":0,"seatsAvailable":372}
+exchange: {"status":"ok","uptimeS":11,"rateValid":true,"lastUpdatedValid":true}
+fidelity: {"storageHealthy":true,"status":"ok","uptimeS":11}

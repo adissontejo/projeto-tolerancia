@@ -88,9 +88,9 @@ A taxa inicial do Exchange também vem do compose: `INITIAL_EXCHANGE_RATE: "5.50
 ## Instrumentação
 
 - **Correlação:** o IMDTravel lê o `X-Correlation-Id` do cliente (ou gera um UUID, se não vier), devolve esse valor no cabeçalho da resposta e o propaga nas quatro chamadas.
-- **Log estruturado:** cada serviço escreve um objeto JSON por linha na saída padrão, com `ts`, `svc`, `cid`, `event` e `ms`. Exemplo:
+- **Log estruturado:** cada serviço escreve um objeto JSON por linha na saída padrão, com `ts`, `svc`, `cid`, `event` e `ms`. Os logs internos do Spring também saem em JSON (sem banner), então nenhuma linha é texto livre. O campo `ts` está em **UTC** (horário de Brasília + 3 h). Exemplo:
   ```json
-  {"ts":"2026-11-23T15:41:44.021Z","svc":"airlineshub","cid":"evidencia-1","event":"venda.processada","ms":726,"flight":"IMD200","day":"2026-12-03","delayMs":726,"result":"SOLD","transactionId":"d94468c2-...","seatsRemaining":19}
+  {"ts":"2026-11-24T00:19:09.913Z","svc":"airlineshub","cid":"evidencia-1","event":"venda.processada","ms":329,"flight":"IMD200","day":"2026-12-03","delayMs":329,"result":"SOLD","transactionId":"72c68ed1-...","seatsRemaining":19}
   ```
   Para seguir uma compra pelos serviços: `docker logs <serviço> | grep '"cid":"<id>"'`.
 - **Sinal de vida:** `GET /health` nos quatro serviços, devolvendo `{ status, uptimeS }` e o resultado da verificação feita. Cada serviço verifica algo de verdade e responde `503` quando a verificação falha:
@@ -173,7 +173,7 @@ Os itens que o script não cobre foram verificados manualmente, de forma isolada
 | Arquivo | O que mostra |
 |---|---|
 | `manual-compra.txt` | Uma compra com `X-Correlation-Id: evidencia-1`, com cabeçalhos e corpo da resposta `201`. |
-| `manual-logs-cid.txt` | As linhas de log JSON dessa compra nos serviços, filtradas pelo `cid`. |
+| `manual-logs-cid.txt` | As linhas de log JSON dessa compra nos quatro serviços, filtradas pelo `cid` e ordenadas por horário: `/buyTicket` → `/flight` → `/convert` → `/sell` → `/bonus`. |
 | `manual-health.txt` | A resposta do `/health` dos quatro serviços. |
 | `manual-cambio.txt` | Duas leituras do `/convert` com 10 s de intervalo, mostrando a taxa e o `asOf` mudando. |
 
@@ -182,6 +182,6 @@ Os itens que o script não cobre foram verificados manualmente, de forma isolada
 | Arquivo | Execução | Resultado |
 |---|---|---|
 | `testes.txt` | `testes.sh` com o sistema no ar | 40 passaram, 0 falharam |
-| `testes-reiniciar.txt` | `testes.sh --reiniciar` | 39 passaram, 0 falharam (uma comparação de taxa foi pulada porque as leituras caíram em ticks diferentes) |
+| `testes-reiniciar.txt` | `testes.sh --reiniciar` | 40 passaram, 0 falharam |
 | `testes-com-falhas.txt` | `testes.sh --com-falhas` | 43 passaram, 0 falharam |
 | `manual-*.txt` | testes manuais | ver tabela acima |
